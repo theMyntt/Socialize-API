@@ -22,7 +22,7 @@ namespace Socialize.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Publication>>> Get(
+        public async Task<ActionResult<IEnumerable<object>>> Get(
             [Required] int page,
             [Required] int limit
         )
@@ -44,14 +44,27 @@ namespace Socialize.Controllers
                 });
             }
 
-            var response = await dbContext.Publication
+            var publications = await dbContext.Publication
                 .Skip((page - 1) * limit)
                 .Take(limit)
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Text,
+                    CreatedBy = new
+                    {
+                        p.CreatedBy.Id,
+                        p.CreatedBy.Name,
+                        p.CreatedBy.Code
+                    },
+                    p.CreatedAt,
+                    LikesCount = dbContext.Likes.Count(l => l.Publication.Id == p.Id)
+                })
                 .ToListAsync();
 
             return Ok(new
             {
-                publications = response,
+                publications,
                 statusCode = 200
             });
         }
@@ -78,7 +91,7 @@ namespace Socialize.Controllers
         {
             try
             {
-                var user = await dbContext.User.FindAsync(dto.UserCode);
+                var user = await dbContext.User.FirstOrDefaultAsync(u => u.Code == dto.UserCode);
 
                 if (user == null)
                 {
