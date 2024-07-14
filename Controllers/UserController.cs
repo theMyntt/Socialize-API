@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -20,9 +21,50 @@ namespace Socialize.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<IEnumerable<object>>> Get(
+            [Required] int page,
+            [Required] int limit
+        )
         {
-            return new string[] { "value1", "value2" };
+            if (limit <= 1 || limit > 100)
+            {
+                return BadRequest(new
+                {
+                    message = "Limit needs to be > 1 and <= 100",
+                    statusCode = 400
+                });
+            }
+            if (page < 1)
+            {
+                return BadRequest(new
+                {
+                    message = "Page needs to be > 1",
+                    statusCode = 400
+                });
+            }
+
+            var bruteResponse = await dbContext.User
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ToListAsync();
+
+            List<object> users = new();
+
+            for (int i = 0; i < bruteResponse.ToArray().Length; i++)
+            {
+                users.Add(new {
+                    code = bruteResponse[i].Code,
+                    name = bruteResponse[i].Name,
+                    description = bruteResponse[i].Description,
+                    createdAt = bruteResponse[i].CreatedAt
+                });
+            }
+
+            return Ok(new
+            {
+                users = users.ToArray(),
+                statusCode = 200
+            });
         }
 
         [HttpPost("login")]
