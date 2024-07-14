@@ -25,10 +25,49 @@ namespace Socialize.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpPost("login")]
+        public async Task<ActionResult<object>> Get([FromBody] LoginUserDTO dto)
         {
-            return "value";
+            var response = await dbContext.User.FirstOrDefaultAsync(u => u.Email == dto.Email && u.Password == dto.Password);
+
+            if (response == null)
+            {
+                return NotFound(new
+                {
+                    message = "No user found",
+                    statusCode = 404
+                });
+            }
+
+            return Ok(new
+            {
+                user = new {
+                    name = response.Name,
+                    code = response.Code,
+                    description = response.Description,
+                    photo = response.Photo,
+                    createdAt = response.CreatedAt
+                },
+                statusCode = 200
+            });
+        }
+
+        [HttpGet("{code}/image")]
+        public async Task<IActionResult> Get(string code)
+        {
+            var user = await dbContext.User.FirstOrDefaultAsync(u => u.Code == code);
+
+            if (user == null)
+            {
+                return NotFound(new {
+                    message = "No user found",
+                    statusCode = 404
+                });
+            }
+
+            var databytes = System.IO.File.ReadAllBytes(user.Photo);
+
+            return File(databytes, "image/png");
         }
 
         [HttpPost]
