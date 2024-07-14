@@ -13,7 +13,7 @@ namespace Socialize.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        ApplicationDbContext dbContext;
+        private readonly ApplicationDbContext dbContext;
 
         public UserController(ApplicationDbContext dbContext)
         {
