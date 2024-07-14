@@ -13,6 +13,7 @@ namespace Socialize.Data
 
 		public DbSet<Publication> Publication { get; set; }
 		public DbSet<User> User { get; set; }
+		public DbSet<Likes> Likes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
