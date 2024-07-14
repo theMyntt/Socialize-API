@@ -1,0 +1,75 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Socialize.Data;
+using Socialize.Models;
+
+namespace Socialize.Controllers
+{
+    [Route("api/[controller]")]
+    public class PublicationController : Controller
+    {
+        private readonly ApplicationDbContext dbContext;
+
+        public PublicationController(ApplicationDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Publication>>> Get(
+            [Required] int page,
+            [Required] int limit
+        )
+        {
+            if (limit <= 1 || limit > 100)
+            {
+                return BadRequest("Limit needs to be > 1 and <= 100");
+            }
+            if (page < 1)
+            {
+                return BadRequest("Page needs to be > 1");
+            }
+
+            var response = await dbContext.Publication
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ToListAsync();
+
+            return Ok(response);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Publication>> Get(int id)
+        {
+            var response = await dbContext.Publication.FindAsync(id);
+
+            if (response == null)
+            {
+                return NotFound("No publication found");
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public void Post([FromBody]string value)
+        {
+        }
+
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody]string value)
+        {
+        }
+
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+        }
+    }
+}
+
