@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Socialize.Data;
+using Socialize.DTOs;
 using Socialize.Models;
 
 namespace Socialize.Controllers
@@ -73,8 +74,31 @@ namespace Socialize.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<ActionResult<object>> Post([FromBody] NewPublicationDTO dto)
         {
+            try
+            {
+                var response = await dbContext.Publication.AddAsync(new Publication
+                {
+                    Text = dto.Text,
+                    CreatedAt = DateTime.Now
+                });
+
+                await dbContext.SaveChangesAsync();
+
+                return StatusCode(201, new
+                {
+                    message = "Publication created",
+                    statusCode = 201
+                });
+            } catch
+            {
+                return StatusCode(500, new
+                {
+                    message = "Internal Server Error",
+                    statusCode = 500
+                });
+            }
         }
 
         [HttpPut("{id}")]
