@@ -28,11 +28,19 @@ namespace Socialize.Controllers
         {
             if (limit <= 1 || limit > 100)
             {
-                return BadRequest("Limit needs to be > 1 and <= 100");
+                return BadRequest(new
+                {
+                    message = "Limit needs to be > 1 and <= 100",
+                    statusCode = 400
+                });
             }
             if (page < 1)
             {
-                return BadRequest("Page needs to be > 1");
+                return BadRequest(new
+                {
+                    message = "Page needs to be > 1",
+                    statusCode = 400
+                });
             }
 
             var response = await dbContext.Publication
@@ -40,7 +48,11 @@ namespace Socialize.Controllers
                 .Take(limit)
                 .ToListAsync();
 
-            return Ok(response);
+            return Ok(new
+            {
+                publications = response,
+                statusCode = 200
+            });
         }
 
         [HttpGet("{id}")]
@@ -50,7 +62,11 @@ namespace Socialize.Controllers
 
             if (response == null)
             {
-                return NotFound("No publication found");
+                return NotFound(new
+                {
+                    message = "No publication found with this id",
+                    statusCode = 404
+                });
             }
 
             return Ok(response);
