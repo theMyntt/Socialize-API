@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Socialize.Data;
+using Socialize.DTOs;
 
 namespace Socialize.Controllers
 {
@@ -20,8 +21,38 @@ namespace Socialize.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<IActionResult> Post([FromBody] LikesDTO dto)
         {
+            var publication = await dbContext.Publication.FindAsync(dto.PublicationId);
+            var user = await dbContext.User.FirstOrDefaultAsync(u => u.Code == dto.UserCode);
+
+            if (publication == null || user == null)
+            {
+                return NotFound(new
+                {
+                    message = "No User/Publication found with this ID",
+                    statusCode = 404
+                });
+            }
+
+            var like = await dbContext.Likes.FirstOrDefaultAsync(u => u.Publication == publication && u.User == user);
+
+            if (like != null)
+            {
+                return Conflict(new
+                {
+                    message = "You already liked this publication",
+                    statusCode = 409
+                });
+            }
+
+            await dbContext.Likes.AddAsync(new Models.Likes {
+                Publication = publication,
+                User = user
+            });
+            await dbContext.SaveChangesAsync();
+
+            return StatusCode(201);
         }
 
         [HttpDelete("{id}")]
