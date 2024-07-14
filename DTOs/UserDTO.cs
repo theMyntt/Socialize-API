@@ -21,5 +21,14 @@ namespace Socialize.DTOs
         [Required]
         public required IFormFile Photo { get; set; }
 	}
+
+	public class LoginUserDTO
+	{
+		[Required]
+		public required string Email { get; set; }
+
+		[Required]
+		public required string Password { get; set; }
+	}
 }
 
