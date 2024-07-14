@@ -12,8 +12,8 @@ using Socialize.Data;
 namespace Socialize.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240714022555_initial create")]
-    partial class initialcreate
+    [Migration("20240714031755_DatabaseCreation")]
+    partial class DatabaseCreation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
