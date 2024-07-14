@@ -102,13 +102,43 @@ namespace Socialize.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<ActionResult<object>> Put(int id, [FromBody]string value)
         {
+            return StatusCode(501, new
+            {
+                message = "Not implemented",
+                statusCode = 501
+            });
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult<object>> Delete(int id)
         {
+            var response = await dbContext.Publication.FindAsync(id);
+
+            if (response == null)
+            {
+                return NotFound(new
+                {
+                    message = $"No publication found with {id} ID",
+                    statusCode = 404
+                });
+            }
+
+            try
+            {
+                dbContext.Publication.Remove(response);
+                await dbContext.SaveChangesAsync();
+
+                return NoContent();
+            } catch
+            {
+                return StatusCode(500, new
+                {
+                    message = "Internal Server Error",
+                    statusCode = 500
+                });
+            }
         }
     }
 }
