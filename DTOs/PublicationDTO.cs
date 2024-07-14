@@ -7,6 +7,9 @@ namespace Socialize.DTOs
 	{
 		[Required]
 		public required string Text { get; set; }
+
+		[Required]
+		public required string UserCode { get; set; }
 	}
 }
 

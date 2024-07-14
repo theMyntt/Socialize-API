@@ -78,9 +78,21 @@ namespace Socialize.Controllers
         {
             try
             {
+                var user = await dbContext.User.FindAsync(dto.UserCode);
+
+                if (user == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "User not found",
+                        statusCode = 404
+                    });
+                }
+
                 var response = await dbContext.Publication.AddAsync(new Publication
                 {
                     Text = dto.Text,
+                    CreatedBy = user,
                     CreatedAt = DateTime.Now
                 });
 
