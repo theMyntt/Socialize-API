@@ -55,12 +55,24 @@ namespace Socialize.Controllers
             return StatusCode(201);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{publicationId}")]
+        public async Task<IActionResult> Delete(int publicationId, [Required] string userCode)
         {
             try
             {
-                var model = await dbContext.Likes.FindAsync(id);
+                var publication = await dbContext.Publication.FindAsync(publicationId);
+                var user = await dbContext.User.FirstOrDefaultAsync(u => u.Code == userCode);
+
+                if (publication == null || user == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "No User/Publication found with this ID",
+                        statusCode = 404
+                    });
+                }
+
+                var model = await dbContext.Likes.FirstOrDefaultAsync(l => l.Publication == publication && l.User == user);
 
                 if (model == null)
                 {
