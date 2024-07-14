@@ -11,7 +11,19 @@ namespace Socialize.Data
 
 		}
 
-		public DbSet<Publication> Publication { get; set; } 
-	}
+		public DbSet<Publication> Publication { get; set; }
+		public DbSet<User> User { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+			modelBuilder.Entity<User>()
+				.HasIndex(e => e.Email)
+				.IsUnique();
+
+			modelBuilder.Entity<User>()
+				.HasIndex(e => e.Code)
+				.IsUnique();
+        }
+    }
 }
 
