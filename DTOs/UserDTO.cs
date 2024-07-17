@@ -30,5 +30,19 @@ namespace Socialize.DTOs
 		[Required]
 		public required string Password { get; set; }
 	}
+
+    public class UserUpdateDto
+    {
+		[Required]
+        public required string Name { get; set; }
+
+		[Required]
+        public required string Email { get; set; }
+
+        public string? Description { get; set; }
+
+		[Required]
+        public required IFormFile Photo { get; set; }
+    }
 }
 

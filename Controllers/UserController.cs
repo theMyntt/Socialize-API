@@ -161,8 +161,58 @@ namespace Socialize.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> Put(int id, [FromForm] UserUpdateDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await dbContext.User.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound(new
+                {
+                    message = "User not found",
+                    statusCode = 404
+                });
+            }
+
+            user.Name = dto.Name;
+            user.Email = dto.Email;
+            user.Description = dto.Description;
+
+            if (dto.Photo != null)
+            {
+                if (System.IO.File.Exists(user.Photo))
+                {
+                    System.IO.File.Delete(user.Photo);
+                }
+
+                var newFilePath = Path.Combine("Storage", dto.Photo.FileName);
+                using Stream fileStream = new FileStream(newFilePath, FileMode.Create);
+                await dto.Photo.CopyToAsync(fileStream);
+                user.Photo = newFilePath;
+            }
+
+            try
+            {
+                await dbContext.SaveChangesAsync();
+                return Ok(new
+                {
+                    message = "User updated successfully",
+                    statusCode = 200
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Internal Server Error",
+                    error = ex.Message,
+                    statusCode = 500
+                });
+            }
         }
 
         [HttpDelete("{id}")]
