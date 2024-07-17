@@ -160,15 +160,15 @@ namespace Socialize.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromForm] UserUpdateDto dto)
+        [HttpPut("{code}")]
+        public async Task<IActionResult> Put(string code, [FromForm] UserUpdateDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = await dbContext.User.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await dbContext.User.FirstOrDefaultAsync(u => u.Code == code);
             if (user == null)
             {
                 return NotFound(new
