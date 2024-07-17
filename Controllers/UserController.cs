@@ -160,6 +160,29 @@ namespace Socialize.Controllers
             }
         }
 
+        [HttpGet("{code}")]
+        public async Task<IActionResult> GetUser(string code)
+        {
+            var user = await dbContext.User.FirstOrDefaultAsync(u => u.Code == code);
+
+            if (user == null)
+            {
+                return NotFound(new
+                {
+                    message = "No user found",
+                    statusCode = 404
+                });
+            }
+
+            return Ok(new
+            {
+                name = user.Name,
+                description = user.Description,
+                code = user.Code,
+                createdAt = user.CreatedAt
+            });
+        }
+
         [HttpPut("{code}")]
         public async Task<IActionResult> Put(string code, [FromForm] UserUpdateDto dto)
         {
