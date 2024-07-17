@@ -44,5 +44,11 @@ namespace Socialize.DTOs
 		[Required]
         public required IFormFile Photo { get; set; }
     }
+
+	public class DeleteUserDTO
+	{
+		[Required]
+		public required string Password { get; set; }
+	}
 }
 

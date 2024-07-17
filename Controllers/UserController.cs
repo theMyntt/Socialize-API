@@ -215,9 +215,55 @@ namespace Socialize.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{code}")]
+        public async Task<IActionResult> Delete(string code, [FromBody] DeleteUserDTO DTO)
         {
+            var user = await dbContext.User.FirstOrDefaultAsync(u => u.Code == code);
+
+            if (user == null)
+            {
+                return NotFound(new
+                {
+                    message = "No user found",
+                    statusCode = 404
+                });
+            }
+
+            if (user.Password != DTO.Password)
+            {
+                return Conflict(new
+                {
+                    message = "Incorrect user informations",
+                    statusCode = 409
+                });
+            }
+
+            dbContext.User.Remove(user);
+
+            if (user.Photo != null)
+            {
+                if (System.IO.File.Exists(user.Photo))
+                {
+                    System.IO.File.Delete(user.Photo);
+                }
+            }
+
+            try
+            {
+                await dbContext.SaveChangesAsync();
+                return Ok(new
+                {
+                    message = "Delete successfuly",
+                    statusCode = 200
+                });
+            } catch
+            {
+                return StatusCode(500, new
+                {
+                    message = "Internal Server Error",
+                    statusCode = 500
+                });
+            }
         }
     }
 }
