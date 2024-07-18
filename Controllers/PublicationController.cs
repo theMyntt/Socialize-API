@@ -126,16 +126,6 @@ namespace Socialize.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<object>> Put(int id, [FromBody]string value)
-        {
-            return StatusCode(501, new
-            {
-                message = "Not implemented",
-                statusCode = 501
-            });
-        }
-
         [HttpDelete("{id}")]
         public async Task<ActionResult<object>> Delete(int id)
         {
