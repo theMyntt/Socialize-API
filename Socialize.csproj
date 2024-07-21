@@ -19,17 +19,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Models\" />
-    <None Remove="Data\" />
-    <None Remove="Controllers\" />
-    <None Remove="DTOs\" />
     <None Remove="Storage\" />
+    <None Remove="Infrastructure\" />
+    <None Remove="Infrastructure\Controllers\" />
+    <None Remove="Infrastructure\DTOs\" />
+    <None Remove="Application\" />
+    <None Remove="Application\Usecases\" />
+    <None Remove="Application\Errors\" />
+    <None Remove="Infrastructure\Repositories\" />
+    <None Remove="Domain\" />
+    <None Remove="Domain\Aggregates\" />
+    <None Remove="Domain\Models\" />
+    <None Remove="Infrastructure\Entities\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Data\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Storage\" />
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Infrastructure\Controllers\" />
+    <Folder Include="Infrastructure\DTOs\" />
+    <Folder Include="Application\" />
+    <Folder Include="Application\Usecases\" />
+    <Folder Include="Application\Errors\" />
+    <Folder Include="Infrastructure\Repositories\" />
+    <Folder Include="Domain\" />
+    <Folder Include="Domain\Aggregates\" />
+    <Folder Include="Domain\Models\" />
+    <Folder Include="Infrastructure\Entities\" />
   </ItemGroup>
 </Project>
