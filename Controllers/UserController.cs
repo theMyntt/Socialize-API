@@ -128,7 +128,9 @@ namespace Socialize.Controllers
                     });
                 }
 
-                var filePath = Path.Combine("Storage", dto.Photo.FileName);
+                Guid UUID = Guid.NewGuid();
+
+                var filePath = Path.Combine("Storage", UUID.ToString());
 
                 using Stream fileStream = new FileStream(filePath, FileMode.Create);
                 dto.Photo.CopyTo(fileStream);
@@ -212,7 +214,9 @@ namespace Socialize.Controllers
                     System.IO.File.Delete(user.Photo);
                 }
 
-                var newFilePath = Path.Combine("Storage", dto.Photo.FileName);
+                Guid UUID = Guid.NewGuid();
+
+                var newFilePath = Path.Combine("Storage", UUID.ToString());
                 using Stream fileStream = new FileStream(newFilePath, FileMode.Create);
                 await dto.Photo.CopyToAsync(fileStream);
                 user.Photo = newFilePath;
