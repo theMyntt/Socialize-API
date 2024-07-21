@@ -31,6 +31,7 @@
     <None Remove="Domain\Aggregates\" />
     <None Remove="Domain\Models\" />
     <None Remove="Infrastructure\Entities\" />
+    <None Remove="Core\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Storage\" />
@@ -45,5 +46,6 @@
     <Folder Include="Domain\Aggregates\" />
     <Folder Include="Domain\Models\" />
     <Folder Include="Infrastructure\Entities\" />
+    <Folder Include="Core\" />
   </ItemGroup>
 </Project>
