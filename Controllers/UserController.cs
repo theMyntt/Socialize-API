@@ -265,6 +265,20 @@ namespace Socialize.Controllers
                 });
             }
 
+            var likes = await dbContext.Likes.Where(l => l.User == user).ToListAsync();
+
+            if (likes.Any())
+            {
+                dbContext.Likes.RemoveRange(likes);
+            }
+
+            var publications = await dbContext.Publication.Where(p => p.CreatedBy == user).ToListAsync();
+
+            if (publications.Any())
+            {
+                dbContext.Publication.RemoveRange(publications);
+            }
+
             dbContext.User.Remove(user);
 
             if (user.Photo != null)
