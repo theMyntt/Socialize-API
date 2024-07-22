@@ -25,13 +25,14 @@
     <None Remove="Infrastructure\DTOs\" />
     <None Remove="Application\" />
     <None Remove="Application\Usecases\" />
-    <None Remove="Application\Errors\" />
     <None Remove="Infrastructure\Repositories\" />
     <None Remove="Domain\" />
     <None Remove="Domain\Aggregates\" />
     <None Remove="Domain\Models\" />
     <None Remove="Infrastructure\Entities\" />
     <None Remove="Core\" />
+    <None Remove="Infrastructure\Controllers\User\" />
+    <None Remove="Application\Usecases\User\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Storage\" />
@@ -40,12 +41,13 @@
     <Folder Include="Infrastructure\DTOs\" />
     <Folder Include="Application\" />
     <Folder Include="Application\Usecases\" />
-    <Folder Include="Application\Errors\" />
     <Folder Include="Infrastructure\Repositories\" />
     <Folder Include="Domain\" />
     <Folder Include="Domain\Aggregates\" />
     <Folder Include="Domain\Models\" />
     <Folder Include="Infrastructure\Entities\" />
     <Folder Include="Core\" />
+    <Folder Include="Infrastructure\Controllers\User\" />
+    <Folder Include="Application\Usecases\User\" />
   </ItemGroup>
 </Project>

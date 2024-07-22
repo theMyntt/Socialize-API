@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Socialize.Data;
 using Socialize.DTOs;
+using Socialize.Models;
 
 namespace Socialize.Controllers
 {
@@ -18,53 +19,6 @@ namespace Socialize.Controllers
         public UserController(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> Get(
-            [Required] int page,
-            [Required] int limit
-        )
-        {
-            if (limit <= 1 || limit > 100)
-            {
-                return BadRequest(new
-                {
-                    message = "Limit needs to be > 1 and <= 100",
-                    statusCode = 400
-                });
-            }
-            if (page < 1)
-            {
-                return BadRequest(new
-                {
-                    message = "Page needs to be > 1",
-                    statusCode = 400
-                });
-            }
-
-            var bruteResponse = await dbContext.User
-                .Skip((page - 1) * limit)
-                .Take(limit)
-                .ToListAsync();
-
-            List<object> users = new();
-
-            for (int i = 0; i < bruteResponse.ToArray().Length; i++)
-            {
-                users.Add(new {
-                    code = bruteResponse[i].Code,
-                    name = bruteResponse[i].Name,
-                    description = bruteResponse[i].Description,
-                    createdAt = bruteResponse[i].CreatedAt
-                });
-            }
-
-            return Ok(new
-            {
-                users = users.ToArray(),
-                statusCode = 200
-            });
         }
 
         [HttpPost("login")]
@@ -135,15 +89,16 @@ namespace Socialize.Controllers
                 using Stream fileStream = new FileStream(filePath, FileMode.Create);
                 dto.Photo.CopyTo(fileStream);
 
-                await dbContext.User.AddAsync(new Models.User {
-                    Code = dto.Code,
-                    Email = dto.Email,
-                    Name = dto.Name,
-                    Password = dto.Password,
-                    Description = dto.Description,
-                    Photo = filePath,
-                    CreatedAt = DateTime.Now
-                });
+                //await dbContext.User.AddAsync(new User {
+                //    Id = 1,
+                //    Code = dto.Code,
+                //    Email = dto.Email,
+                //    Name = dto.Name,
+                //    Password = dto.Password,
+                //    Description = dto.Description,
+                //    Photo = filePath,
+                //    CreatedAt = DateTime.Now
+                //});
                 await dbContext.SaveChangesAsync();
 
                 return StatusCode(201, new

@@ -50,5 +50,14 @@ namespace Socialize.DTOs
 		[Required]
 		public required string Password { get; set; }
 	}
+
+	public class GetUserDTO
+	{
+		[Required]
+		public int page { get; set; }
+
+		[Required]
+		public int limit { get; set; }
+    }
 }
 

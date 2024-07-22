@@ -9,13 +9,33 @@ namespace Socialize.Models
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
-		public required string Name { get; set; }
-		public required string Code { get; set; }
-		public required string Email { get; set; }
-		public required string Password { get; set; }
+		public string Name { get; set; }
+		public string Code { get; set; }
+		public string Email { get; set; }
+		public string Password { get; set; }
 		public string? Description { get; set; }
-		public required string Photo { get; set; }
+		public string Photo { get; set; }
 		public DateTime CreatedAt { get; set; }
-	}
+
+        public User(
+            int id,
+            string name,
+            string code,
+            string email,
+            string password,
+            string? description,
+            string photo,
+            DateTime createdAt)
+        {
+            Id = id;
+            Name = name;
+            Code = code;
+            Email = email;
+            Password = password;
+            Description = description;
+            Photo = photo;
+            CreatedAt = createdAt;
+        }
+    }
 }
 
